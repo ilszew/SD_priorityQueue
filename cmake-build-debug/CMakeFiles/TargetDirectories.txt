@@ -1,0 +1,3 @@
+C:/Users/kolew/Documents/Projekty/SD_kolejkaPriorytetowa/cmake-build-debug/CMakeFiles/SD_kolejkaPriorytetowa.dir
+C:/Users/kolew/Documents/Projekty/SD_kolejkaPriorytetowa/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/kolew/Documents/Projekty/SD_kolejkaPriorytetowa/cmake-build-debug/CMakeFiles/rebuild_cache.dir
