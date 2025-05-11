@@ -1,0 +1,10 @@
+﻿################################################################################
+# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite-journal
+/.vs/SA_priorityQueue/v17
+/.vs/SA_priorityQueue/FileContentIndex
+/.vs/SA_priorityQueue/CopilotIndices/17.13.441.19478
+/.vs
