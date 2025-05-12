@@ -73,7 +73,6 @@ public:
     }
 
     void modify_priority(T element, int new_priority) {
-        // Find element's position
         auto it = position_map.find(element);
         if (it == position_map.end()) {
             throw std::invalid_argument("Nie znaleziono elementu");
@@ -82,10 +81,8 @@ public:
         size_t index = it->second;
         elements[index].priority = new_priority;
 
-        // Sort to maintain priority order
         std::sort(elements.begin(), elements.end(), compare_priority);
 
-        // Update positions
         update_position_map();
     }
 
@@ -102,6 +99,7 @@ public:
         for (const auto& elem : elements) {
             std::cout << "(" << elem.value << "," << elem.priority << ") ";
         }
+        std::cout << std::endl;
         std::cout << std::endl;
     }
 };
