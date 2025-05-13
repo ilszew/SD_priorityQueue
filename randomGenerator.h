@@ -7,14 +7,17 @@
 class RandomGenerator {
 private:
     std::mt19937 rng;
-    std::uniform_int_distribution<int> dist;
     unsigned int current_seed;
 
-    static const std::vector<unsigned int> DEFAULT_SEEDS;
+    int priority_multiplier;
 
 public:
-    explicit RandomGenerator(int min = 0, int max = INT_MAX, unsigned int seed = std::random_device()())
-        : rng(seed), dist(min, max), current_seed(seed) {}
+    explicit RandomGenerator(int min = 0, int max = INT_MAX,
+                             unsigned int seed = std::random_device()(),
+                             int priority_mult = 5)
+        : rng(seed),
+          current_seed(seed),
+          priority_multiplier(priority_mult) {}
 
     void setSeed(unsigned int seed) {
         current_seed = seed;
@@ -25,21 +28,28 @@ public:
         return current_seed;
     }
 
-    static const std::vector<unsigned int>& getDefaultSeeds() {
-        return DEFAULT_SEEDS;
+    int generatePriority(int structure_size) {
+        int min_priority = structure_size;
+        int max_priority = structure_size * priority_multiplier;
+        std::uniform_int_distribution<int> dist(min_priority, max_priority);
+        return dist(rng);
     }
 
-    int getRandomInt() {
+    int getRandomInt(int min = 0, int max = INT_MAX) {
+        std::uniform_int_distribution<int> dist(min, max);
         return dist(rng);
     }
 
     int getRandomIndex(int size) {
         if (size <= 0) return 0;
-        return dist(rng) % size;
+        std::uniform_int_distribution<int> dist(0, size - 1);
+        return dist(rng);
+    }
+
+    static const std::vector<unsigned int>& getDefaultSeeds() {
+        static const std::vector<unsigned int> DEFAULT_SEEDS = {12345, 67890, 24680};
+        return DEFAULT_SEEDS;
     }
 };
-
-
-const std::vector<unsigned int> RandomGenerator::DEFAULT_SEEDS = {12345, 67890, 24680};
 
 #endif //RANDOMGENERATOR_H
