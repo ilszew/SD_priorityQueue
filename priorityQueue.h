@@ -1,7 +1,6 @@
 #ifndef PRIORITYQUEUE_H
 #define PRIORITYQUEUE_H
 
-#include <iostream>
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
@@ -59,11 +58,11 @@ public:
         throw std::invalid_argument("Pusta");
     }
 
-    size_t return_size() const {
+    [[nodiscard]] size_t return_size() const {
         return data.size();
     }
 
-    bool empty() const {
+    [[nodiscard]] bool empty() const {
         return data.empty();
     }
 };

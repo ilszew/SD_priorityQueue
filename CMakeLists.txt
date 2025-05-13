@@ -7,4 +7,5 @@ add_executable(SD_kolejkaPriorytetowa main.cpp
         priorityQueue.h
         priorityQueueHeap.h
         timer.h
-        randomGenerator.h)
+        randomGenerator.h
+        priorityQueuePerformanceTester.h)
