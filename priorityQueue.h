@@ -1,7 +1,7 @@
 #ifndef PRIORITYQUEUE_H
 #define PRIORITYQUEUE_H
 
-#include <vector>
+#include "arrayList.h"
 #include <stdexcept>
 #include <algorithm>
 
@@ -11,60 +11,69 @@ private:
     struct Entry {
         T element;
         int priority;
+
+        bool operator==(const Entry& other) const {
+            return element == other.element;
+        }
     };
 
-    std::vector<Entry> data;
+    ArrayList<Entry> data;
 
 public:
     PriorityQueue() = default;
 
     void insert(const T& element, int priority) {
-        data.push_back({ element, priority });
+        Entry newEntry{ element, priority };
+        data.DodajK(newEntry);
     }
 
     T extract_max() {
-        if (data.empty())
+        if (data.wielkosc() == 0)
             throw std::out_of_range("Pusta");
 
-        auto it = std::max_element(data.begin(), data.end(),
-            [](const Entry& a, const Entry& b) {
-                return a.priority < b.priority;
-            });
+        int maxIndex = 0;
+        for (int i = 1; i < data.wielkosc(); ++i) {
+            if (data.dane[i].priority > data.dane[maxIndex].priority) {
+                maxIndex = i;
+            }
+        }
 
-        T result = it->element;
-        data.erase(it);
+        T result = data.dane[maxIndex].element;
+        data.UsunLos(maxIndex);
         return result;
     }
 
     T peek() const {
-        if (data.empty())
+        if (data.wielkosc() == 0)
             throw std::out_of_range("Pusta");
 
-        auto it = std::max_element(data.begin(), data.end(),
-            [](const Entry& a, const Entry& b) {
-                return a.priority < b.priority;
-            });
+        int maxIndex = 0;
+        for (int i = 1; i < data.wielkosc(); ++i) {
+            if (data.dane[i].priority > data.dane[maxIndex].priority) {
+                maxIndex = i;
+            }
+        }
 
-        return it->element;
+        return data.dane[maxIndex].element;
     }
 
     void modify_key(const T& element, int new_priority) {
-        for (auto& entry : data) {
-            if (entry.element == element) {
-                entry.priority = new_priority;
+        for (int i = 0; i < data.wielkosc(); ++i) {
+            if (data.dane[i].element == element) {
+                data.dane[i].priority = new_priority;
                 return;
             }
         }
-        throw std::invalid_argument("Pusta");
+        throw std::invalid_argument("Nie znaleziono elementu");
     }
 
     [[nodiscard]] size_t return_size() const {
-        return data.size();
+        return data.wielkosc();
     }
 
     [[nodiscard]] bool empty() const {
-        return data.empty();
+        return data.wielkosc() == 0;
     }
 };
 
-#endif //PRIORITYQUEUE_H
+#endif // PRIORITYQUEUE_H
