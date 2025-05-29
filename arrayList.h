@@ -1,33 +1,77 @@
 #ifndef ARRAYLIST_H
 #define ARRAYLIST_H
 
-template <typename T>
+#include <iostream>
 
+template <typename T>
 class ArrayList {
 protected:
 	T* dane;
 	int maxroz;
 	int roz;
+
 	void zmroz() {
-		if (roz == 0) {
-			maxroz = 1;
-		}
-		else {
-			maxroz *= 2;
-		}
-		T* nDane = new T[maxroz];
+		int newMaxroz = (maxroz == 0) ? 1 : maxroz * 2;
+		T* nDane = new T[newMaxroz];
+
+		// Kopiuj istniejące elementy
 		for (int i = 0; i < roz; i++) {
 			nDane[i] = dane[i];
 		}
-		delete[] dane;
+
+		// Zwolnij starą pamięć (tylko jeśli była alokowana)
+		if (dane != nullptr) {
+			delete[] dane;
+		}
+
 		dane = nDane;
+		maxroz = newMaxroz;
 	}
 
 public:
+	// Konstruktor domyślny
 	ArrayList() : dane(nullptr), maxroz(0), roz(0) {}
 
+	// Konstruktor kopiujący
+	ArrayList(const ArrayList& other) : dane(nullptr), maxroz(0), roz(0) {
+		if (other.roz > 0) {
+			maxroz = other.maxroz;
+			roz = other.roz;
+			dane = new T[maxroz];
+			for (int i = 0; i < roz; i++) {
+				dane[i] = other.dane[i];
+			}
+		}
+	}
+
+	// Operator przypisania
+	ArrayList& operator=(const ArrayList& other) {
+		if (this != &other) {
+			// Zwolnij obecną pamięć
+			if (dane != nullptr) {
+				delete[] dane;
+				dane = nullptr;
+			}
+
+			// Skopiuj z other
+			maxroz = other.maxroz;
+			roz = other.roz;
+
+			if (other.roz > 0) {
+				dane = new T[maxroz];
+				for (int i = 0; i < roz; i++) {
+					dane[i] = other.dane[i];
+				}
+			}
+		}
+		return *this;
+	}
+
+	// Destruktor
 	~ArrayList() {
-		delete[] dane;
+		if (dane != nullptr) {
+			delete[] dane;
+		}
 	}
 
 	void DodajP(T element) {
@@ -39,7 +83,6 @@ public:
 		}
 		dane[0] = element;
 		roz++;
-
 	}
 
 	void UsunP() {
@@ -82,7 +125,6 @@ public:
 		}
 		dane[miejsce] = element;
 		roz++;
-
 	}
 
 	void UsunLos(int miejsce) {
@@ -104,6 +146,12 @@ public:
 		return false;
 	}
 
+	// Const wersja wielkosc()
+	int wielkosc() const {
+		return roz;
+	}
+
+	// Niekonst wersja dla kompatybilności wstecznej
 	int wielkosc() {
 		return roz;
 	}
@@ -113,6 +161,22 @@ public:
 			std::cout << dane[i] << " ";
 		}
 		std::cout << std::endl;
+	}
+
+	// Operator[] z sprawdzaniem granic
+	T& operator[](int index) {
+		if (index < 0 || index >= roz) {
+			throw std::out_of_range("Indeks poza zakresem");
+		}
+		return dane[index];
+	}
+
+	// Const wersja operator[]
+	const T& operator[](int index) const {
+		if (index < 0 || index >= roz) {
+			throw std::out_of_range("Indeks poza zakresem");
+		}
+		return dane[index];
 	}
 };
 

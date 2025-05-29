@@ -33,12 +33,12 @@ public:
 
         int maxIndex = 0;
         for (int i = 1; i < data.wielkosc(); ++i) {
-            if (data.dane[i].priority > data.dane[maxIndex].priority) {
+            if (data[i].priority > data[maxIndex].priority) {
                 maxIndex = i;
             }
         }
 
-        T result = data.dane[maxIndex].element;
+        T result = data[maxIndex].element;
         data.UsunLos(maxIndex);
         return result;
     }
@@ -49,18 +49,27 @@ public:
 
         int maxIndex = 0;
         for (int i = 1; i < data.wielkosc(); ++i) {
-            if (data.dane[i].priority > data.dane[maxIndex].priority) {
+            if (data[i].priority > data[maxIndex].priority) {
                 maxIndex = i;
             }
         }
 
-        return data.dane[maxIndex].element;
+        return data[maxIndex].element;
     }
 
     void modify_key(const T& element, int new_priority) {
-        for (int i = 0; i < data.wielkosc(); ++i) {
-            if (data.dane[i].element == element) {
-                data.dane[i].priority = new_priority;
+        int size = data.wielkosc();
+        for (int i = 0; i < size; ++i) {
+            if (data[i].element == element) {
+                // Tworzymy nowy Entry z zaktualizowanym priorytetem
+                Entry updated = data[i];
+                updated.priority = new_priority;
+
+                // Usuwamy stary element
+                data.UsunLos(i);
+
+                // Dodajemy zaktualizowany element
+                data.DodajK(updated);
                 return;
             }
         }
